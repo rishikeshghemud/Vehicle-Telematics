@@ -11,7 +11,7 @@ import 'dotenv/config';
 const app: Express = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://rishikeshghemudwork1:YWq7hCcwhh@clusterdev.6nkbof6.mongodb.net/';
-const DB_NAME = process.env.DB_NAME || 'vehicle_telematic';
+const DB_NAME = process.env.DB_NAME || 'vehicle_telematics';
 
 // Middleware
 app.use(cors());
