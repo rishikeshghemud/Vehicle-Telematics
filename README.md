@@ -47,6 +47,23 @@ npm run dev
 ```
 The server will start on **http://localhost:8000** 
 
+## Testing
+
+### 1. Stack Used
+- Vitest
+- Jest
+- React Testing Library (RTL)
+- @testing-library/jest-dom
+
+### 2. Running Tests
+Navigate to the client or server (or both) folder and run:
+```
+npm test
+```
+
+### 3. Test Files
+All test files are present under \_\_tests\_\_ directory in client and server.
+
 ## Troubleshooting
 
 If you encounter any issues:

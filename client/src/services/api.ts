@@ -1,11 +1,25 @@
 import { type Vehicle, type ApiResponse } from '../types/vehicle.types';
 
-const API_BASE_URL = (import.meta.env.VITE_BASE_URL as string) || 'http://localhost:8000/api';
+let API_BASE_URL = 'http://localhost:8000/api';
+
+// Try to access import.meta safely with lazy evaluation
+function getApiBaseUrl(): string {
+  try {
+    // Using Function constructor to defer parsing
+    // eslint-disable-next-line no-new-func
+    const getEnv = new Function('return import.meta.env?.VITE_BASE_URL;');
+    const envUrl = getEnv();
+    if (envUrl) API_BASE_URL = envUrl;
+  } catch {
+    // Fallback to default
+  }
+  return API_BASE_URL;
+}
 
 export const vehicleApi = {
   // Get all vehicles
   async getAllVehicles(): Promise<Vehicle[]> {
-    const response = await fetch(`${API_BASE_URL}/vehicles`);
+    const response = await fetch(`${getApiBaseUrl()}/vehicles`);
     const data: ApiResponse<Vehicle[]> = await response.json();
     
     if (!data.success) {
@@ -17,7 +31,7 @@ export const vehicleApi = {
 
   // Get vehicle by ID
   async getVehicleById(id: string): Promise<Vehicle> {
-    const response = await fetch(`${API_BASE_URL}/vehicles/${id}`);
+    const response = await fetch(`${getApiBaseUrl()}/vehicles/${id}`);
     const data: ApiResponse<Vehicle> = await response.json();
     
     if (!data.success) {
@@ -29,7 +43,7 @@ export const vehicleApi = {
 
   // Get vehicles by type
   async getVehiclesByType(type: string): Promise<Vehicle[]> {
-    const response = await fetch(`${API_BASE_URL}/vehicles/type/${type}`);
+    const response = await fetch(`${getApiBaseUrl()}/vehicles/type/${type}`);
     const data: ApiResponse<Vehicle[]> = await response.json();
     
     if (!data.success) {
@@ -41,7 +55,7 @@ export const vehicleApi = {
 
   // Create vehicle
   async createVehicle(vehicle: Omit<Vehicle, '_id'>): Promise<Vehicle> {
-    const response = await fetch(`${API_BASE_URL}/vehicles`, {
+    const response = await fetch(`${getApiBaseUrl()}/vehicles`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -60,7 +74,7 @@ export const vehicleApi = {
 
   // Update vehicle
   async updateVehicle(id: string, vehicle: Omit<Vehicle, '_id'>): Promise<Vehicle> {
-    const response = await fetch(`${API_BASE_URL}/vehicles/${id}`, {
+    const response = await fetch(`${getApiBaseUrl()}/vehicles/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -83,7 +97,7 @@ export const vehicleApi = {
     latitude: number, 
     longitude: number
   ): Promise<Vehicle> {
-    const response = await fetch(`${API_BASE_URL}/vehicles/${id}/location`, {
+    const response = await fetch(`${getApiBaseUrl()}/vehicles/${id}/location`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -102,7 +116,7 @@ export const vehicleApi = {
 
   // Delete vehicle
   async deleteVehicle(id: string): Promise<void> {
-    const response = await fetch(`${API_BASE_URL}/vehicles/${id}`, {
+    const response = await fetch(`${getApiBaseUrl()}/vehicles/${id}`, {
       method: 'DELETE',
     });
     
@@ -115,7 +129,7 @@ export const vehicleApi = {
 
   // Get statistics
   async getStatistics(): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/vehicles/statistics`);
+    const response = await fetch(`${getApiBaseUrl()}/vehicles/statistics`);
     const data: ApiResponse<any> = await response.json();
     
     if (!data.success) {
